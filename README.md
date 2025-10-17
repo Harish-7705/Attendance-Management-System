@@ -1,215 +1,150 @@
-# ALMS - Attendance & Leave Management System
+# 🚀 ALMS - Attendance & Leave Management System
 
-A comprehensive web-based Attendance & Leave Management System (ALMS).
+A comprehensive, web-based **Attendance & Leave Management System (ALMS)** designed for efficient employee management, attendance tracking, and detailed analytics. Developed specifically for **Chennai Metro Rail Limited (CMRL)** with a focus on usability, security, and performance.
 
-## Features
+---
 
-### 🏢 **Branding**
-- Professional corporate design and consistent color scheme
-- Responsive design for all devices
+## 📌 Features
 
-### 👥 **User Management**
-- Role-based access control (Admin, Manager, Employee)
-- Secure authentication system
-- Employee profile management
-- Department-wise organization
+### 🏢 Branding
+- Corporate-grade design with consistent branding
+- Responsive layout for desktops, tablets, and mobile devices
 
-### ⏰ **Attendance Tracking**
+### 👥 User Management
+- Role-based access (Admin, Manager, Employee)
+- Secure authentication
+- Employee profile handling
+- Department-wise user organization
+
+### ⏰ Attendance Tracking
 - Real-time attendance marking
-- Multiple attendance types (Present, Late, Absent, Half-day)
-- Time tracking with automatic timestamps
-- Remarks and notes support
+- Multiple attendance states (Present, Late, Absent, Half-day)
+- Timestamp logging
+- Support for custom remarks
 
-### 📊 **Dashboard & Analytics**
-- Real-time attendance statistics
-- Visual charts and graphs
+### 📊 Dashboard & Analytics
+- Real-time visual data insights
+- Interactive charts (via Chart.js)
 - Recent activity feed
-- Quick action buttons
+- Quick access buttons
 
-### 📈 **Reports & Analytics**
-- Daily, weekly, and monthly reports
-- Department-wise filtering
-- Export functionality
-- Attendance trend analysis
+### 📈 Reports
+- Daily, weekly, monthly, and department-wise reports
+- Export functionality (CSV/PDF in future)
+- Attendance trends and filtering
 
-### ⚙️ **System Settings**
-- Configurable working hours
-- Grace time settings
+### ⚙️ System Settings
+- Configurable working hours and grace periods
 - Notification preferences
-- Security settings
+- Security and session settings
 
-## Technology Stack
+---
 
-- **Frontend**: HTML5, CSS3, JavaScript (ES6+)
-- **Styling**: Custom CSS with CSS Variables
-- **Icons**: Font Awesome 6.0
-- **Fonts**: Google Fonts (Roboto)
-- **Charts**: Chart.js (optional)
-- **Authentication**: Session-based with role management
+## 🛠️ Technology Stack
 
-## File Structure
+| Layer | Technology |
+|-------|------------|
+| Frontend | HTML5, CSS3, JavaScript (ES6+) |
+| Styling | Custom CSS, CSS Variables |
+| Fonts | Google Fonts (Roboto) |
+| Icons | Font Awesome 6 |
+| Charts | Chart.js (optional integration) |
+| Authentication | Session-based login with role control |
 
-```
+---
+
+## 📁 File Structure
+
 Attandance_management/
-├── index.html          # Main application interface
-├── login.html          # Authentication page
-├── styles.css          # Main stylesheet with CMRL branding
-├── script.js           # Application logic and functionality
-└── README.md           # This documentation file
-```
+├── index.html # Main interface
+├── login.html # Login page
+├── styles.css # CMRL-branded styles
+├── script.js # Core functionality
+└── README.md # Project documentation
 
-## Getting Started
 
-### 1. **Setup**
-- Download all files to a web server directory
+---
+
+## 🚀 Getting Started
+
+### 1. Setup
+- Clone or download the project to your web server directory
 - Ensure all files are in the same directory
-- Open `login.html` in a web browser
+- Open `login.html` in a modern browser
 
-### 2. **Login**
-Use the following demo credentials:
+### 2. Demo Credentials
 
-| Role | Username | Password | Access Level |
-|------|----------|----------|--------------|
-| Admin | admin | admin123 | Full system access |
-| Manager | manager | manager123 | Reports and attendance |
-| Employee | employee | employee123 | Basic attendance marking |
+| Role     | Username   | Password     | Access Level              |
+|----------|------------|--------------|---------------------------|
+| Admin    | `admin`    | `admin123`   | Full system access        |
+| Manager  | `manager`  | `manager123` | Reports & attendance view |
+| Employee | `employee` | `employee123`| Attendance marking only   |
 
-### 3. **Navigation**
-- **Dashboard**: Overview of attendance statistics
-- **Attendance**: Mark and manage attendance records
-- **Employees**: Manage employee information (Admin only)
-- **Reports**: Generate attendance reports (Manager+)
-- **Settings**: System configuration (Admin only)
+---
 
-## Key Features
+## 🧭 Navigation Guide
 
-### 🔐 **Authentication System**
-- Secure login with session management
-- Role-based access control
-- Automatic logout on session expiry
-- Password protection
+- **Dashboard** – Overview & statistics  
+- **Attendance** – Mark/view daily attendance  
+- **Employees** – Manage profiles (Admin only)  
+- **Reports** – Generate filters-based reports (Manager/Admin)  
+- **Settings** – System configurations (Admin only)
 
-### 📱 **Responsive Design**
-- Mobile-first approach
-- Tablet and desktop optimized
-- Touch-friendly interface
-- Cross-browser compatibility
+---
 
-### 🎨 **Branding**
-- Corporate palette, typography, and consistent visual identity
+## 👤 Usage Guide
 
-### ⚡ **Performance**
-- Fast loading times
-- Optimized CSS and JavaScript
-- Efficient data handling
-- Minimal external dependencies
+### 👨‍💼 For Admins
+- Add/edit/delete employees
+- Configure system settings (hours, notifications, grace)
+- View all reports and attendance data
 
-## Usage Guide
+### 👩‍💼 For Managers
+- Monitor attendance for their department
+- Generate and export reports
+- Approve/decline leave requests
 
-### **For Administrators**
-1. **Employee Management**: Add, edit, and manage employee records
-2. **System Settings**: Configure working hours, grace time, and notifications
-3. **Full Access**: View all reports, manage all employees, and system settings
+### 👨‍🔧 For Employees
+- Mark daily attendance
+- Track their own attendance history
+- Submit leave requests
 
-### **For Managers**
-1. **Attendance Monitoring**: View and manage attendance records
-2. **Report Generation**: Create and export attendance reports
-3. **Department Oversight**: Monitor team attendance patterns
+---
 
-### **For Employees**
-1. **Attendance Marking**: Mark daily attendance with timestamps
-2. **Personal Records**: View individual attendance history
-3. **Leave Requests**: Submit and track leave applications
+## 🎨 Customization
 
-## Customization
+### 🎨 Color Theme
+Modify `:root` variables in `styles.css` for branding:
 
-### **Colors**
-The system uses CSS custom properties for easy color customization:
-```css
+##css
 :root {
     --cmrl-blue: #006FAF;
     --cmrl-dark-blue: #004A7C;
     --cmrl-light-blue: #E6F3FF;
-    /* ... other colors */
 }
-```
+###📅 System Flowchart
 
-### **Departments**
-Add or modify departments in the JavaScript file:
-```javascript
-// In script.js, update the department options
-const departments = ['operations', 'maintenance', 'admin', 'security'];
-```
-
-### **Working Hours**
-Configure default working hours in the settings section or modify the initialization code.
-
-## Browser Support
-
-- ✅ Chrome 80+
-- ✅ Firefox 75+
-- ✅ Safari 13+
-- ✅ Edge 80+
-- ✅ Mobile browsers (iOS Safari, Chrome Mobile)
-
-## Security Features
-
-- Session-based authentication
-- Role-based access control
-- Input validation and sanitization
-- XSS protection
-- CSRF protection ready
-
-## Future Enhancements
-
-- [ ] Biometric integration
-- [ ] Mobile app development
-- [ ] Advanced reporting with PDF export
-- [ ] Email notifications
-- [ ] API integration
-- [ ] Database backend
-- [ ] Multi-language support
-- [ ] Advanced analytics dashboard
-
-## Support
-
-For technical support or customization requests:
-- **Email**: admin@cmrl.co.in
-- **Phone**: +91-44-12345678
-- **Website**: [CMRL Official Website](https://www.cmrl.co.in)
-
-## License
-
-This attendance management system is developed specifically for Chennai Metro Rail Limited (CMRL) and is proprietary software.
-
-## Version History
-
-- **v1.0.0** - Initial release with core attendance management features
-- **v1.1.0** - Added role-based access control and authentication
-- **v1.2.0** - Enhanced UI/UX with CMRL branding
-- **v1.3.0** - Added responsive design and mobile optimization
-
----
-
-**Developed for ALMS**  
-*Empowering efficient workforce management through technology*
-
-## System Flowchart
-
-```mermaid
 flowchart TD
+  A[Login] --> B[Dashboard]
+  B --> C[Attendance Module\n- Capture Sign-in / Sign-out]
+  B --> D[Employee Master\n- Capture Employee Details]
+  B --> E[Leave Master\n- Define Leave Types\n- Track Leave Balance]
+  B --> F[Holiday Master\n- Define Annual Holidays]
+  E --> G[Leave Apply\n- Employee Leave Applications]
+  G --> H[Leave Sanction\n- Approve/Reject]
+  B --> I[Reports]
+  I --> J[Attendance Reports]
+  I --> K[Leave Reports]
 
-A[Login] --> B[Dashboard]
+###🚧 Future Enhancements
 
-B --> C[Attendance Module\n- Capture Sign-in / Sign-out]
-B --> D[Employee Master\n- Capture Employee Details]
-B --> E[Leave Master\n- Define Leave Types\n- Track Employee Leave Balance]
-B --> F[Holiday Master\n- Define Annual Holidays]
+ Biometric device integration
+ Mobile app version (Android/iOS)
+ Export to PDF
+ Email alerts and reminders
+ Backend integration (MySQL/PostgreSQL)
+ REST API support
+ Multi-language support
+ Advanced analytics dashboard
 
-E --> G[Leave Apply\n- Capture Employee Leave Applications]
-G --> H[Leave Sanction\n- Capture Sanction Details]
-
-B --> I[Reports]
-I --> J[Attendance Reports]
-I --> K[Leave Reports]
-```
+ 
