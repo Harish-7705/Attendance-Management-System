@@ -240,7 +240,7 @@ table th {
 
                 </div>
                   <!-- <script>
-    fetch('http://localhost:3000/get-users')
+    fetch('https://containers.back4app.com/apps/b20ef7f7-2d91-4c3e-982c-cc65688966c5/get-users')
       .then(response => response.json())
       .then(data => {
         const select = document.getElementById('employeeId');
@@ -257,7 +257,7 @@ table th {
       const leaveType = document.getElementById('leaveType').value;
       const leaveCount = document.getElementById('leaveCount').value;
 
-      const response = await fetch('http://localhost:3000/update-leave', {
+      const response = await fetch('https://containers.back4app.com/apps/b20ef7f7-2d91-4c3e-982c-cc65688966c5/update-leave', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ userid, leaveType, leaveCount })
@@ -295,7 +295,7 @@ table th {
         </main>
         <script>
   // Fetch users to populate the Employee ID dropdown
-  fetch('http://localhost:3000/get-users')
+  fetch('https://containers.back4app.com/apps/b20ef7f7-2d91-4c3e-982c-cc65688966c5/get-users')
     .then(response => response.json())
     .then(data => {
       const select = document.getElementById('employeeId');
@@ -314,7 +314,7 @@ table th {
 //         const leaveType = document.querySelector('.leave-type-btn.active').textContent;
 //         const leaveCount = document.getElementById('balance').value;
 
-//         const response = await fetch('http://localhost:3000/update-leave', {
+//         const response = await fetch('https://containers.back4app.com/apps/b20ef7f7-2d91-4c3e-982c-cc65688966c5/update-leave', {
 //           method: 'POST',
 //           headers: { 'Content-Type': 'application/json' },
 //           body: JSON.stringify({ userid, leaveType, leaveCount })
@@ -341,7 +341,7 @@ table th {
 </script>
 <script>
   // Fetch users to populate the Employee ID dropdown
-  fetch('http://localhost:3000/get-users')
+  fetch('https://containers.back4app.com/apps/b20ef7f7-2d91-4c3e-982c-cc65688966c5/get-users')
     .then(response => response.json())
     .then(data => {
       const select = document.getElementById('employeeId');
@@ -369,7 +369,7 @@ table th {
         };
         console.log('Submitting payload:', payload); // Debug log
 
-        const response = await fetch('http://localhost:3000/update-leave', {
+        const response = await fetch('https://containers.back4app.com/apps/b20ef7f7-2d91-4c3e-982c-cc65688966c5/update-leave', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload) // Send payload to the backend

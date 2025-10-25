@@ -20,7 +20,7 @@
       </div>
 
       <div class="card p-4">
-        <form id="leaveForm" method="post" action="http://localhost:3000/api/leave">
+        <form id="leaveForm" method="post" action="https://containers.back4app.com/apps/b20ef7f7-2d91-4c3e-982c-cc65688966c5/api/leave">
           <div class="leave-balances">
             <div class="balance-box"> 
               <span>Casual Leave (CL)</span> 
@@ -164,7 +164,7 @@
           away_hq: this.away_hq && this.away_hq.checked ? 'yes' : 'no'
         };
 
-        fetch('http://localhost:3000/api/leave', {
+        fetch('https://containers.back4app.com/apps/b20ef7f7-2d91-4c3e-982c-cc65688966c5/api/leave', {
           method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(payload)
         })
         .then(res => res.json().catch(() => null))

@@ -94,7 +94,7 @@
 
     async function fetchLeaveData() {
         try {
-            const res = await fetch('http://localhost:3000/api/leave-balances');
+            const res = await fetch('https://containers.back4app.com/apps/b20ef7f7-2d91-4c3e-982c-cc65688966c5/api/leave-balances');
             if (!res.ok) throw new Error(`HTTP ${res.status}`);
             const data = await res.json();
             leaveDataAll = Array.isArray(data) ? data : [];

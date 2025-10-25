@@ -283,7 +283,7 @@ h2.fw-bold {
           away_hq: this.away_hq && this.away_hq.checked ? 'yes' : 'no' // send 'yes' if checked, else 'no'
         };
 
-    fetch('http://localhost:3000/api/leave', {
+    fetch('https://containers.back4app.com/apps/b20ef7f7-2d91-4c3e-982c-cc65688966c5/api/leave', {
       method: 'POST',
       headers: {'Content-Type':'application/json'},
       body: JSON.stringify(payload)
@@ -314,7 +314,7 @@ let currentLeavePage = 1;
 
 async function loadLeaves() {
   try {
-    const res = await fetch('http://localhost:3000/api/leaves')
+    const res = await fetch('https://containers.back4app.com/apps/b20ef7f7-2d91-4c3e-982c-cc65688966c5/api/leaves')
 
     const data = await res.json();
 
