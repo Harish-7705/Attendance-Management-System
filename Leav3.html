@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leave Master</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #fafafa;
+            margin: 40px;
+        }
+        h2 {
+            color: #333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: white;
+        }
+        th, td {
+            text-align: left;
+            padding: 12px 16px;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f5f5f5;
+            font-weight: bold;
+        }
+        tr:hover {
+            background-color: #f9f9f9;
+        }
+        .edit-link {
+            color: #007BFF;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .edit-link:hover {
+            text-decoration: underline;
+        }
+        .add-btn {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 10px 18px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        .add-btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:12px;">
+        <div style="display:flex; align-items:center; gap:12px;">
+            <a href="manager.html" id="backToManager" style="display:inline-block;padding:8px 12px;background:#007BFF;color:#fff;border-radius:6px;text-decoration:none;font-weight:600;">←</a>
+            <h2 style="margin:0">Leave Master</h2>
+        </div>
+        <a href="adjust_leave.html" class="add-btn">+ Add Leave Balance</a>
+    </div>
+
+    <table id="leaveTable">
+        <thead>
+            <tr>
+                <th>EMPLOYEE ID</th>
+                <th>LEAVE TYPE</th>
+                <th>LEAVE DESCRIPTION</th>
+                <th>BALANCE</th>
+                <th>ACTION</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Data will load here -->
+        </tbody>
+    </table>
+
+    <!-- Pagination controls -->
+    <div id="leavePagination" style="margin-top:12px; display:flex; gap:8px; align-items:center;">
+        <!-- Controls injected by JS -->
+    </div>
+
+    
+
+<script>
+    // Client-side pagination for leave table
+    let leaveDataAll = [];
+    let currentPage = 1;
+    let pageSize = 10; // default
+
+    async function fetchLeaveData() {
+        try {
+            const res = await fetch('http://localhost:3000/api/leave-balances');
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            const data = await res.json();
+            leaveDataAll = Array.isArray(data) ? data : [];
+        } catch (err) {
+            console.warn('Could not fetch leave data, using sample data. Error:', err.message);
+            // Fallback sample data
+            leaveDataAll = [
+                { empId: 'EMP001', leaveType: 'Casual Leave (CL)', description: 'Casual leave for personal reasons', balance: 10 },
+                { empId: 'EMP001', leaveType: 'Earned Leave (EL)', description: 'Earned leave accumulated over time', balance: 15 },
+                { empId: 'EMP002', leaveType: 'Casual Leave (CL)', description: 'Casual leave for personal reasons', balance: 8 },
+                { empId: 'EMP002', leaveType: 'Earned Leave (EL)', description: 'Earned leave accumulated over time', balance: 12 },
+                { empId: 'EMP003', leaveType: 'Hospital Leave (HL)', description: 'Leave for hospitalization', balance: 20 }
+            ];
+        }
+        currentPage = 1;
+        renderPage();
+    }
+
+    function renderPage() {
+        const tbody = document.querySelector('#leaveTable tbody');
+        tbody.innerHTML = '';
+
+        const total = leaveDataAll.length;
+        const totalPages = Math.max(1, Math.ceil(total / pageSize));
+        if (currentPage < 1) currentPage = 1;
+        if (currentPage > totalPages) currentPage = totalPages;
+
+        const start = (currentPage - 1) * pageSize;
+        const pageItems = leaveDataAll.slice(start, start + pageSize);
+
+        if (pageItems.length === 0) {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `<td colspan="5" style="text-align:center;color:#666;padding:18px;">No records found.</td>`;
+            tbody.appendChild(tr);
+        } else {
+            pageItems.forEach(row => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${row.empId}</td>
+                    <td>${row.leaveType}</td>
+                    <td>${row.description}</td>
+                    <td>${row.balance}</td>
+                    <td><a href="adjust_leave.html" class="edit-link">Edit</a></td>
+                `;
+                
+                tbody.appendChild(tr);
+            });
+        }
+
+        renderPaginationControls(totalPages, total);
+    }
+
+    function renderPaginationControls(totalPages, totalItems) {
+        const container = document.getElementById('leavePagination');
+        container.innerHTML = '';
+
+        const prev = document.createElement('button');
+        prev.textContent = 'Prev';
+        prev.disabled = currentPage === 1;
+        prev.onclick = () => { currentPage--; renderPage(); };
+        container.appendChild(prev);
+
+        // Page numbers (show up to 7)
+        const maxButtons = 7;
+        let startPage = 1;
+        let endPage = totalPages;
+        if (totalPages > maxButtons) {
+            const half = Math.floor(maxButtons / 2);
+            startPage = Math.max(1, currentPage - half);
+            endPage = startPage + maxButtons - 1;
+            if (endPage > totalPages) {
+                endPage = totalPages;
+                startPage = Math.max(1, endPage - maxButtons + 1);
+            }
+        }
+
+        if (startPage > 1) {
+            const btn = document.createElement('button');
+            btn.textContent = '1';
+            btn.onclick = () => { currentPage = 1; renderPage(); };
+            container.appendChild(btn);
+            if (startPage > 2) {
+                const dots = document.createElement('span');
+                dots.textContent = '...';
+                dots.style.margin = '0 6px';
+                container.appendChild(dots);
+            }
+        }
+
+        for (let i = startPage; i <= endPage; i++) {
+            const btn = document.createElement('button');
+            btn.textContent = String(i);
+            btn.className = (i === currentPage) ? 'active-page' : '';
+            btn.onclick = () => { currentPage = i; renderPage(); };
+            container.appendChild(btn);
+        }
+
+        if (endPage < totalPages) {
+            if (endPage < totalPages - 1) {
+                const dots = document.createElement('span');
+                dots.textContent = '...';
+                dots.style.margin = '0 6px';
+                container.appendChild(dots);
+            }
+            const btn = document.createElement('button');
+            btn.textContent = String(totalPages);
+            btn.onclick = () => { currentPage = totalPages; renderPage(); };
+            container.appendChild(btn);
+        }
+
+        const next = document.createElement('button');
+        next.textContent = 'Next';
+        next.disabled = currentPage === totalPages || totalPages === 0;
+        next.onclick = () => { currentPage++; renderPage(); };
+        container.appendChild(next);
+
+        // page size selector
+        const sizeLabel = document.createElement('label');
+        sizeLabel.style.marginLeft = '12px';
+        sizeLabel.style.display = 'flex';
+        sizeLabel.style.alignItems = 'center';
+        sizeLabel.innerHTML = 'Per page: ';
+        const select = document.createElement('select');
+        [5,10,20,50].forEach(s => {
+            const opt = document.createElement('option');
+            opt.value = s; opt.textContent = s;
+            if (s === pageSize) opt.selected = true;
+            select.appendChild(opt);
+        });
+        select.onchange = () => { pageSize = parseInt(select.value,10); currentPage = 1; renderPage(); };
+        sizeLabel.appendChild(select);
+        container.appendChild(sizeLabel);
+
+        // info
+        const info = document.createElement('span');
+        info.style.marginLeft = '12px';
+        const from = totalItems === 0 ? 0 : ((currentPage - 1) * pageSize) + 1;
+        const to = Math.min(currentPage * pageSize, totalItems);
+        info.textContent = ` Showing ${from}-${to} of ${totalItems}`;
+        container.appendChild(info);
+
+        // small styles for active
+        const activeStyle = document.createElement('style');
+        activeStyle.textContent = `.active-page{background:#007BFF;color:#fff;border-radius:4px;padding:4px 8px;} button{padding:6px 8px;margin:0 2px;} select{margin-left:6px;padding:4px;} `;
+        document.head.appendChild(activeStyle);
+    }
+
+    // Init
+    fetchLeaveData();
+</script>
+</body>
+
+</html>

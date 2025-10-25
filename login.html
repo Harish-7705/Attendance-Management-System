@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ALMS - Login</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, var(--cmrl-blue) 0%, var(--cmrl-dark-blue) 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+            font-family: 'Roboto', sans-serif;
+        }
+        
+        .login-container {
+            background: white;
+            padding: 3rem 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 450px;
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+        
+        .login-header {
+            text-align: center;
+        }
+        
+        .login-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+        }
+        
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: var(--cmrl-blue);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--cmrl-dark-blue);
+            letter-spacing: 1px;
+        }
+        
+        .system-name {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 0.5rem;
+        }
+        
+        .welcome-section {
+            text-align: center;
+        }
+        
+        .welcome-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--cmrl-dark-blue);
+            margin-bottom: 0.25rem;
+        }
+        
+        .welcome-subtitle {
+            font-size: 0.95rem;
+            color: var(--cmrl-medium-gray);
+            margin-bottom: 1rem;
+        }
+        
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .form-group label {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--cmrl-dark-gray);
+        }
+        
+        .form-group input {
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 0.95rem;
+            transition: border-color 0.3s ease;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--cmrl-blue);
+            box-shadow: 0 0 0 3px rgba(0, 111, 175, 0.1);
+        }
+        
+        .form-group input::placeholder {
+            color: #999;
+        }
+        
+        .remember-forgot-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .remember-me {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .remember-me input[type="checkbox"] {
+            width: auto;
+            margin: 0;
+        }
+        
+        .remember-me label {
+            font-size: 0.9rem;
+            color: var(--cmrl-dark-gray);
+            cursor: pointer;
+        }
+        
+        .forgot-password {
+            text-align: right;
+        }
+        
+        .login-btn {
+            width: 100%;
+            padding: 0.75rem;
+            background: linear-gradient(135deg, var(--cmrl-blue), var(--cmrl-dark-blue));
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 1rem;
+        }
+        
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 111, 175, 0.3);
+        }
+        
+        .login-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        
+        
+        .forgot-password a {
+            color: var(--cmrl-blue);
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        
+        .forgot-password a:hover {
+            text-decoration: underline;
+        }
+        
+        .demo-credentials {
+            background: var(--cmrl-light-blue);
+            padding: 1rem;
+            border-radius: 4px;
+            margin-top: 1rem;
+            font-size: 0.85rem;
+            border: 1px solid rgba(0, 111, 175, 0.2);
+        }
+        
+        .demo-credentials h3 {
+            color: var(--cmrl-dark-blue);
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+        
+        .demo-credentials p {
+            color: var(--cmrl-medium-gray);
+            margin-bottom: 0.25rem;
+        }
+        
+        .error-message {
+            background: rgba(220, 53, 69, 0.1);
+            color: var(--danger-red);
+            padding: 0.75rem;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+            border: 1px solid rgba(220, 53, 69, 0.2);
+            display: none;
+            font-size: 0.9rem;
+        }
+        
+        .success-message {
+            background: rgba(40, 167, 69, 0.1);
+            color: var(--success-green);
+            padding: 0.75rem;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+            border: 1px solid rgba(40, 167, 69, 0.2);
+            display: none;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 480px) {
+            .login-container {
+                margin: 1rem;
+                padding: 2rem 1.5rem;
+            }
+            
+            .welcome-title {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-header">
+            <div class="login-logo">
+                <div class="logo-icon">A</div>
+                <div class="logo-text">ALMS</div>
+            </div>
+            <div class="system-name">Attendance & Leave Management System</div>
+        </div>
+        
+        <div class="welcome-section">
+            <h1 class="welcome-title">Welcome</h1>
+            <p class="welcome-subtitle">Log in to your account to continue.</p>
+        </div>
+        
+        <div class="error-message" id="errorMessage"></div>
+        <div class="success-message" id="successMessage"></div>
+        
+        <form class="login-form" id="loginForm" action="/login" method="POST">
+            <div class="form-group">
+                <label for="username">Username/Email</label>
+                <input type="text" id="username" name="username" placeholder="Enter your username or email" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="Enter your password" required>
+            </div>
+            
+            <div class="remember-forgot-row">
+                <div class="remember-me">
+                    <input type="checkbox" id="rememberMe" name="rememberMe">
+                    <label for="rememberMe">Remember Me</label>
+                </div>
+                <div class="forgot-password">
+                    <a href="#" onclick="showForgotPassword()">Forgot Password?</a>
+                </div>
+            </div>
+            <button type="submit" class="login-btn" id="loginBtn">Login</button>
+        </form>
+        
+        
+        
+        <!-- <div class="demo-credentials">
+            <h3>Demo Credentials</h3>
+            <p><strong>Admin:</strong> admin / admin123</p>
+            <p><strong>Manager:</strong> manager / manager123</p>
+            <p><strong>Employee:</strong> employee / employee123</p>
+        </div> -->
+    </div>
+    
+    <script>
+        // Demo users for authentication
+        // const users = {
+        //     'admin': {
+        //         password: 'admin123',
+        //         role: 'admin',
+        //         name: 'Admin User',
+        //         department: 'administration'
+        //     },
+        //     'manager': {
+        //         password: 'manager123',
+        //         role: 'manager',
+        //         name: 'Manager User',
+        //         department: 'operations'
+        //     },
+        //     'employee': {
+        //         password: 'employee123',
+        //         role: 'employee',
+        //         name: 'Employee User',
+        //         department: 'maintenance'
+        //     }
+        // };
+        
+        // Forgot password functionality
+        function showForgotPassword() {
+            alert('Please contact your system administrator to reset your password.\n\nEmail: admin@cmrl.co.in\nPhone: +91-44-12345678');
+        }
+        
+        // Check if user is already logged in
+        if (sessionStorage.getItem('currentUser')) {
+            window.location.href = 'index.html';
+        }
+        
+        // Enter key handling
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                document.getElementById('loginForm').dispatchEvent(new Event('submit'));
+            }
+        });
+        
+        // Auto-focus username field
+        document.getElementById('username').focus();
+    </script>
+</body>
+</html>

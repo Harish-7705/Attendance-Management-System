@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ALMS - Admin Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="base.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  
+    <!-- Sidebar -->
+<div id="sidebar" class="sidebar" aria-label="Main Navigation">
+    <div class="sidebar-header">
+    <div class="logo" id="sidebarLogo" style="cursor:pointer;">
+        <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiByeD0iNCIgZmlsbD0iIzAwNkZBRiIvPgo8cGF0aCBkPSJNMTAgMTJIMzBWMTZIMTBWMTJaIiBmaWxsPSJ3aGl0ZSIvPgo8cGF0aCBkPSJNMTAgMjBIMzBWMjRIMTBWMjBaIiBmaWxsPSJ3aGl0ZSIvPgo8cGF0aCBkPSJNMTAgMjhIMzBWMzJIMTBWMjhaIiBmaWxsPSJ3aGl0ZSIvPgo8L3N2Zz4K" alt="CMRL Logo">
+        <span class="logo-text">ALMS</span>
+    </div>
+</div>
+    <nav class="sidebar-nav">
+        <ul>
+            <li><a href="#dashboard" class="nav-link">Dashboard</a></li>
+            <li><a href="#attendance" class="nav-link">Attendance</a></li>
+            <li><a href="#attendance" class="nav-link">Attendance Management</a></li>
+            <li><a href="#employees" class="nav-link">Employee Management</a></li>
+            <li><a href="#leave-management" class="nav-link">Leave Management</a></li>
+            <li><a href="#holidays" class="nav-link">Holiday Management</a></li>
+            
+        </ul>
+    </nav>
+                    
+  <div class="sidebar-user">
+    <span class="user-name">Loading...</span>
+    <i class="fas fa-user-shield"></i>
+    <button class="btn btn-secondary" onclick="adminLogout()" style="margin-left: 10px;">
+        <i class="fas fa-sign-out-alt"></i> Logout
+    </button>
+</div>
+
+
+<script>
+  async function loadUsername() {
+    try {
+      const res = await fetch('/user/profile');
+      const data = await res.json();
+
+      if (res.ok && data.username && data.role) {
+        // Capitalize first letter of role
+        const roleName = data.role.charAt(0).toUpperCase() + data.role.slice(1);
+        document.querySelector('.sidebar-user .user-name').innerText = `Admin ${data.username}`;
+      } else {
+        document.querySelector('.sidebar-user .user-name').innerText = 'Admin User';
+      }
+    } catch (err) {
+      console.error('Failed to load user info:', err);
+      document.querySelector('.sidebar-user .user-name').innerText = 'Admin';
+    }
+  }
+
+  loadUsername();
+</script>
+
+  </div>
+
+    <!-- Main Content -->
+    <main class="main">
+        <div class="container">
+            <!-- Dashboard Section -->
+            <section id="dashboard" class="section active">
+                <div class="dashboard-container">
+                    <div class="dashboard-header">
+                        <h1>Admin Dashboard</h1>
+                        <p>Welcome to the Administrative Control Panel</p>
+                    </div>
+                    
+                    <div class="dashboard-grid">
+                        <!-- Quick Actions Section -->
+                        <div class="quick-actions-section">
+                            <h2>Quick Actions</h2>
+                            <div class="quick-actions-grid">
+                                <button class="quick-action-btn" onclick="showSection('employees')">
+                                    <i class="fas fa-user-plus"></i>
+                                    <span>Manage Employees</span>
+                                </button>
+                                <button class="quick-action-btn" onclick="showSection('attendance')">
+                                    <i class="fas fa-clipboard-list"></i>
+                                    <span>View Attendance</span>
+                                </button>
+                                <button class="quick-action-btn" onclick="showSection('leave-management')">
+                                    <i class="fas fa-file-alt"></i>
+                                    <span>Leave Overview</span>
+                                </button>
+                                <button class="quick-action-btn" onclick="showSection('holidays')">
+                                    <i class="fas fa-calendar-alt"></i>
+                                    <span>Holiday Calendar</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Overview Section -->
+                        <div class="overview-section">
+                            <h2>System Overview</h2>
+                            <div class="overview-stats">
+                                <div class="overview-item">
+                                    <span class="overview-label">Total Employees</span>
+                                    <span class="overview-number" id="totalEmployees">-</span>
+                                </div>
+                                <div class="overview-item">
+                                    <span class="overview-label">Active Today</span>
+                                    <span class="overview-number" id="activeToday">-</span>
+                                </div>
+                                <div class="overview-item">
+                                    <span class="overview-label">Pending Leaves</span>
+                                    <span class="overview-number" id="pendingLeaves">-</span>
+                                </div>
+                                <div class="overview-item">
+                                    <span class="overview-label">System Health</span>
+                                    <span class="overview-number" id="systemHealth">100%</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Recent Activities Section -->
+                        <div class="pending-tasks-section">
+                            <h2>Recent Activities</h2>
+                            <div class="pending-tasks-list">
+                                <div class="pending-task-item">
+                                    <i class="fas fa-user-plus"></i>
+                                    <span>New employee onboarding completed</span>
+                                </div>
+                                <div class="pending-task-item">
+                                    <i class="fas fa-clock"></i>
+                                    <span>Attendance system sync completed</span>
+                                </div>
+                                <div class="pending-task-item">
+                                    <i class="fas fa-calendar-check"></i>
+                                    <span>Holiday calendar updated for next month</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- System Notifications Section -->
+                        <div class="notifications-section">
+                            <h2>System Alerts</h2>
+                            <div class="notifications-list">
+                                <div class="notification-item">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                    <span>3 employees have not marked attendance today</span>
+                                </div>
+                                <div class="notification-item">
+                                    <i class="fas fa-info-circle"></i>
+                                    <span>Weekly backup completed successfully</span>
+                                </div>
+                                <div class="notification-item">
+                                    <i class="fas fa-calendar-times"></i>
+                                    <span>5 leave applications pending manager approval</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Attendance Management Section -->
+           
+
+            <!-- Employee Management Section -->
+
+    </main>
+
+    <!-- Add Employee Modal -->
+   
+
+    <!-- Add Holiday Modal -->
+    <div id="addHolidayModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Add New Holiday</h2>
+                <span class="close" onclick="closeAddHolidayModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="addHolidayForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Holiday Name</label>
+                            <input type="text" id="newHolidayName" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Date</label>
+                            <input type="date" id="newHolidayDate" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Year</label>
+                            <input type="number" id="newHolidayYear" min="2024" max="2030" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Type</label>
+                            <select id="newHolidayType" required>
+                                <option value="National">National</option>
+                                <option value="Regional">Regional</option>
+                                <option value="Company">Company</option>
+                            </select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeAddHolidayModal()">Cancel</button>
+                <button type="button" class="btn btn-primary" onclick="addHoliday()">Add Holiday</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        // Admin-specific JavaScript functions
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check authentication first
+            checkAuthentication();
+            
+            // Set today's date as default for date filters
+            document.getElementById('dateFilter').value = new Date().toISOString().split('T')[0];
+            
+            // Load initial data
+            loadDashboardData();
+            loadAttendanceData();
+            loadEmployees();
+            loadLeaveData();
+            loadHolidays();
+        });
+
+        // Authentication check function
+        async function checkAuthentication() {
+            try {
+                const res = await fetch('/user/profile');
+                if (!res.ok) {
+                    if (res.status === 401) {
+                        alert("You must log in first!");
+                        window.location.href = "login.html";
+                        return;
+                    }
+                    throw new Error('Authentication failed');
+                }
+                const userData = await res.json();
+                
+                // Check if user is admin
+                if (userData.role !== 'admin') {
+                    alert("Access denied. Admin privileges required.");
+                    window.location.href = "login.html";
+                    return;
+                }
+                
+                // Update username display
+                const userNameElement = document.querySelector('.sidebar-user .user-name');
+                if (userNameElement) {
+                    userNameElement.textContent = `Admin ${userData.username}`;
+                }
+                
+            } catch (error) {
+                console.error('Authentication error:', error);
+                alert("Authentication failed. Please log in again.");
+                window.location.href = "login.html";
+            }
+        }
+
+        // Admin logout function
+        async function adminLogout() {
+            try {
+                const res = await fetch('/logout', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                if (res.ok) {
+                    window.location.href = "login.html";
+                } else {
+                    console.error('Logout failed');
+                    // Force redirect anyway
+                    window.location.href = "login.html";
+                }
+            } catch (error) {
+                console.error('Logout error:', error);
+                // Force redirect anyway
+                window.location.href = "login.html";
+            }
+        }
+
+        // Navigation function
+        function showSection(sectionId) {
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(s => s.classList.remove('active'));
+            
+            const section = document.getElementById(sectionId);
+            section.classList.add('active');
+        }
+
+        // Dashboard data loading
+        async function loadDashboardData() {
+            try {
+                // Load total employees
+                const empRes = await fetch('/api/employees');
+                const employees = await empRes.json();
+                document.getElementById('totalEmployees').textContent = employees.length || 0;
+
+                // Load active today (mock data for now)
+                document.getElementById('activeToday').textContent = Math.floor(employees.length * 0.85) || 0;
+
+                // Load pending leaves
+                const leaveRes = await fetch('/api/leaves');
+                const leaves = await leaveRes.json();
+                const pendingLeaves = leaves.filter(leave => leave.status === 'Pending').length;
+                document.getElementById('pendingLeaves').textContent = pendingLeaves || 0;
+
+            } catch (error) {
+                console.error('Error loading dashboard data:', error);
+            }
+        }
+
+        // Attendance management
+        async function loadAttendanceData() {
+            const tbody = document.getElementById('attendanceTableBody');
+            tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:#666;padding:12px;">Loading...</td></tr>';
+            
+            try {
+                const date = document.getElementById('dateFilter').value;
+                const department = document.getElementById('departmentFilter').value;
+                const search = document.getElementById('searchEmployee').value;
+
+                const res = await fetch(`/api/attendance?date=${date}&department=${department}&search=${search}`);
+                const data = await res.json();
+
+                if (!Array.isArray(data) || data.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:#666;padding:12px;">No attendance records found</td></tr>';
+                    return;
+                }
+
+                tbody.innerHTML = '';
+                let presentCount = 0, lateCount = 0, absentCount = 0, halfDayCount = 0;
+
+                data.forEach(record => {
+                    const status = record.status || 'Present';
+                    const statusClass = status.toLowerCase().replace(' ', '-');
+                    
+                    if (status === 'Present') presentCount++;
+                    else if (status === 'Late') lateCount++;
+                    else if (status === 'Absent') absentCount++;
+                    else if (status === 'Half Day') halfDayCount++;
+
+                    const row = `
+                        <tr>
+                            <td>${record.employee_id || record.userid || 'N/A'}</td>
+                            <td>${record.name || 'Unknown'}</td>
+                            <td>${record.department || 'N/A'}</td>
+                            <td>${record.start_time ? new Date(record.start_time).toLocaleTimeString() : 'N/A'}</td>
+                            <td>${record.end_time ? new Date(record.end_time).toLocaleTimeString() : 'N/A'}</td>
+                            <td>${record.hours_worked || '0'} hrs</td>
+                            <td><span class="status-badge status-${statusClass}">${status}</span></td>
+                            <td>
+                                <button class="btn-inline" onclick="editAttendance('${record.id}')">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                    tbody.insertAdjacentHTML('beforeend', row);
+                });
+
+                // Update summary cards
+                document.getElementById('presentCount').textContent = presentCount;
+                document.getElementById('lateCount').textContent = lateCount;
+                document.getElementById('absentCount').textContent = absentCount;
+                document.getElementById('halfDayCount').textContent = halfDayCount;
+
+            } catch (error) {
+                console.error('Error loading attendance data:', error);
+                tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:#c00;padding:12px;">Error loading attendance data</td></tr>';
+            }
+        }
+
+        // Employee management
+        async function loadEmployees() {
+            const tbody = document.getElementById('employeesTableBody');
+            tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:#666;padding:12px;">Loading...</td></tr>';
+            
+            try {
+                const res = await fetch('/api/employees');
+                const employees = await res.json();
+
+                if (!Array.isArray(employees) || employees.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:#666;padding:12px;">No employees found</td></tr>';
+                    return;
+                }
+
+                tbody.innerHTML = '';
+                employees.forEach(emp => {
+                    const statusClass = emp.status?.toLowerCase() || 'active';
+                    const row = `
+                        <tr>
+                            <td>${emp.id}</td>
+                            <td>${emp.name}</td>
+                            <td>${emp.email || 'N/A'}</td>
+                            <td>${emp.department || 'N/A'}</td>
+                            <td>${emp.position || 'N/A'}</td>
+                            <td>${emp.phone || 'N/A'}</td>
+                            <td><span class="status-badge status-${statusClass}">${emp.status || 'Active'}</span></td>
+                            <td>
+                                <button class="btn-inline" onclick="editEmployee('${emp.id}')">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn-inline" onclick="deleteEmployee('${emp.id}')">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                    tbody.insertAdjacentHTML('beforeend', row);
+                });
+
+            } catch (error) {
+                console.error('Error loading employees:', error);
+                tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:#c00;padding:12px;">Error loading employees</td></tr>';
+            }
+        }
+
+        // Leave management
+        async function loadLeaveData() {
+            const tbody = document.getElementById('leaveTableBody');
+            tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;color:#666;padding:12px;">Loading...</td></tr>';
+            
+            try {
+                const res = await fetch('/api/leaves');
+                const leaves = await res.json();
+
+                if (!Array.isArray(leaves) || leaves.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;color:#666;padding:12px;">No leave applications found</td></tr>';
+                    return;
+                }
+
+                tbody.innerHTML = '';
+                let totalApplications = 0, pendingApplications = 0, approvedApplications = 0;
+
+                leaves.forEach(leave => {
+                    totalApplications++;
+                    if (leave.status === 'Pending') pendingApplications++;
+                    if (leave.status === 'Approved') approvedApplications++;
+
+                    const statusClass = leave.status?.toLowerCase() || 'pending';
+                    const row = `
+                        <tr>
+                            <td>${leave.id}</td>
+                            <td>${leave.employeeID || leave.userid || 'Unknown'}</td>
+                            <td>${leave.leave_type}</td>
+                            <td>${new Date(leave.start_date).toLocaleDateString()}</td>
+                            <td>${new Date(leave.end_date).toLocaleDateString()}</td>
+                            <td>${leave.no_of_days}</td>
+                            <td><span class="status-badge status-${statusClass}">${leave.status}</span></td>
+                            <td>${new Date(leave.created_at || Date.now()).toLocaleDateString()}</td>
+                            <td>
+                                <button class="btn-inline" onclick="viewLeaveDetails('${leave.id}')">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                    tbody.insertAdjacentHTML('beforeend', row);
+                });
+
+                // Update leave statistics
+                document.getElementById('totalApplications').textContent = totalApplications;
+                document.getElementById('pendingApplications').textContent = pendingApplications;
+                document.getElementById('approvedApplications').textContent = approvedApplications;
+
+            } catch (error) {
+                console.error('Error loading leave data:', error);
+                tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;color:#c00;padding:12px;">Error loading leave data</td></tr>';
+            }
+        }
+
+        // Holiday management
+        async function loadHolidays() {
+            const tbody = document.getElementById('holidayTableBody');
+            tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:#666;padding:12px;">Loading...</td></tr>';
+            
+            try {
+                const year = document.getElementById('yearFilter').value;
+                const res = await fetch(`/holidays?year=${year}`);
+                const holidays = await res.json();
+
+                if (!Array.isArray(holidays) || holidays.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:#666;padding:12px;">No holidays found</td></tr>';
+                    return;
+                }
+
+                tbody.innerHTML = '';
+                holidays.forEach(holiday => {
+                    const row = `
+                        <tr>
+                            <td>${new Date(holiday.date).toLocaleDateString()}</td>
+                            <td>${holiday.name}</td>
+                            <td>${holiday.type || 'National'}</td>
+                            <td>${holiday.year}</td>
+                            <td>
+                                <button class="btn-inline" onclick="editHoliday('${holiday.id}')">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn-inline" onclick="deleteHoliday('${holiday.id}')">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                    tbody.insertAdjacentHTML('beforeend', row);
+                });
+
+            } catch (error) {
+                console.error('Error loading holidays:', error);
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:#c00;padding:12px;">Error loading holidays</td></tr>';
+            }
+        }
+
+        // Modal functions
+        function showAddEmployeeModal() {
+            document.getElementById('addEmployeeModal').style.display = 'block';
+        }
+
+        function closeAddEmployeeModal() {
+            document.getElementById('addEmployeeModal').style.display = 'none';
+            document.getElementById('addEmployeeForm').reset();
+        }
+
+        function showAddHolidayModal() {
+            document.getElementById('addHolidayModal').style.display = 'block';
+            document.getElementById('newHolidayYear').value = new Date().getFullYear();
+        }
+
+        function closeAddHolidayModal() {
+            document.getElementById('addHolidayModal').style.display = 'none';
+            document.getElementById('addHolidayForm').reset();
+        }
+
+        // Add employee function
+        async function addEmployee() {
+            const employeeData = {
+                id: document.getElementById('newEmployeeId').value,
+                name: document.getElementById('newEmployeeName').value,
+                email: document.getElementById('newEmployeeEmail').value,
+                phone: document.getElementById('newEmployeePhone').value,
+                department: document.getElementById('newEmployeeDepartment').value,
+                position: document.getElementById('newEmployeePosition').value,
+                joining_date: document.getElementById('newEmployeeJoiningDate').value,
+                status: document.getElementById('newEmployeeStatus').value
+            };
+
+            try {
+                const res = await fetch('/api/employees', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(employeeData)
+                });
+
+                if (res.ok) {
+                    alert('Employee added successfully!');
+                    closeAddEmployeeModal();
+                    loadEmployees();
+                    loadDashboardData();
+                } else {
+                    alert('Error adding employee');
+                }
+            } catch (error) {
+                console.error('Error adding employee:', error);
+                alert('Error adding employee');
+            }
+        }
+
+        // Add holiday function
+        async function addHoliday() {
+            const holidayData = {
+                name: document.getElementById('newHolidayName').value,
+                date: document.getElementById('newHolidayDate').value,
+                year: parseInt(document.getElementById('newHolidayYear').value),
+                type: document.getElementById('newHolidayType').value
+            };
+
+            try {
+                const res = await fetch('/holidays', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(holidayData)
+                });
+
+                if (res.ok) {
+                    alert('Holiday added successfully!');
+                    closeAddHolidayModal();
+                    loadHolidays();
+                } else {
+                    alert('Error adding holiday');
+                }
+            } catch (error) {
+                console.error('Error adding holiday:', error);
+                alert('Error adding holiday');
+            }
+        }
+
+        // Settings tab functions
+        function showSettingsTab(tabName) {
+            // Remove active class from all tabs and content
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.settings-tab').forEach(tab => tab.classList.remove('active'));
+            
+            // Add active class to selected tab and content
+            event.target.classList.add('active');
+            document.getElementById(`${tabName}-settings`).classList.add('active');
+        }
+
+        // Export functions
+        function exportAttendance() {
+            // Implementation for exporting attendance data
+            alert('Attendance export functionality will be implemented');
+        }
+
+        function exportEmployees() {
+            // Implementation for exporting employee data
+            alert('Employee export functionality will be implemented');
+        }
+
+        // Report generation functions
+        function generateAttendanceReport() {
+            document.getElementById('reportFilters').style.display = 'block';
+            document.getElementById('reportResults').style.display = 'none';
+        }
+
+        function generateMonthlyReport() {
+            document.getElementById('reportFilters').style.display = 'block';
+            document.getElementById('reportResults').style.display = 'none';
+        }
+
+        function generateEmployeeReport() {
+            document.getElementById('reportFilters').style.display = 'block';
+            document.getElementById('reportResults').style.display = 'none';
+        }
+
+        function generateDepartmentReport() {
+            document.getElementById('reportFilters').style.display = 'block';
+            document.getElementById('reportResults').style.display = 'none';
+        }
+
+        function generateLeaveReport() {
+            document.getElementById('reportFilters').style.display = 'block';
+            document.getElementById('reportResults').style.display = 'none';
+        }
+
+        function generateLeaveTrendReport() {
+            document.getElementById('reportFilters').style.display = 'block';
+            document.getElementById('reportResults').style.display = 'none';
+        }
+
+        // Settings save functions
+        function saveGeneralSettings() {
+            alert('General settings saved successfully!');
+        }
+
+        function saveAttendanceSettings() {
+            alert('Attendance settings saved successfully!');
+        }
+
+        function saveLeaveSettings() {
+            alert('Leave settings saved successfully!');
+        }
+
+        function saveNotificationSettings() {
+            alert('Notification settings saved successfully!');
+        }
+
+        function createBackup() {
+            alert('Backup created successfully!');
+        }
+
+        function restoreBackup() {
+            alert('Backup restore functionality will be implemented');
+        }
+
+        // Close modals when clicking outside
+        window.onclick = function(event) {
+            const addEmployeeModal = document.getElementById('addEmployeeModal');
+            const addHolidayModal = document.getElementById('addHolidayModal');
+            
+            if (event.target === addEmployeeModal) {
+                closeAddEmployeeModal();
+            }
+            if (event.target === addHolidayModal) {
+                closeAddHolidayModal();
+            }
+        }
+    </script>
+</body>
+</html>

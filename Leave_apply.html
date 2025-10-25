@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+   
+    
+</head>
+<style>
+    /* General Page Styling */
+body {
+  background-color: #f4f6f9;
+  font-family: "Poppins", sans-serif;
+  margin: 0;
+  padding: 0;
+  color: #333;
+}
+
+.section {
+  padding: 50px 0;
+}
+
+/* Header Styling */
+h2.fw-bold {
+  font-size: 2rem;
+  color: #0d6efd;
+}
+
+.text-muted {
+  font-size: 0.95rem;
+}
+
+/* Card Styling */
+.card {
+  background-color: #fff;
+  border-radius: 15px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.12);
+}
+
+/* Search Box */
+#leavesearchInput {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 8px 12px;
+  transition: 0.3s;
+}
+
+#leavesearchInput:focus {
+  border-color: #0d6efd;
+  box-shadow: 0 0 4px rgba(13, 110, 253, 0.4);
+  outline: none;
+}
+
+/* Apply Leave Button */
+.btn-primary {
+  background: linear-gradient(90deg, #0d6efd, #007bff);
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+  background: linear-gradient(90deg, #007bff, #0b5ed7);
+  transform: translateY(-2px);
+}
+
+/* Styled Table */
+.styled-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+  font-size: 0.95rem;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.styled-table thead tr {
+  background-color: #0d6efd;
+  color: #ffffff;
+  text-align: left;
+}
+
+.styled-table th,
+.styled-table td {
+  padding: 12px 15px;
+  text-align: left;
+}
+
+.styled-table tbody tr {
+  border-bottom: 1px solid #dddddd;
+  transition: background 0.3s ease;
+}
+
+.styled-table tbody tr:nth-of-type(even) {
+  background-color: #f9f9f9;
+}
+
+.styled-table tbody tr:hover {
+  background-color: #eef4ff;
+}
+
+/* Status Badge */
+.styled-table td:nth-child(7) {
+  font-weight: 600;
+}
+
+.styled-table td:nth-child(7):contains("Pending") {
+  color: #ff9800;
+}
+
+.styled-table td:nth-child(7):contains("Approved") {
+  color: #28a745;
+}
+
+.styled-table td:nth-child(7):contains("Rejected") {
+  color: #dc3545;
+}
+
+/* Pagination Styling */
+.pagination {
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.pagination button {
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  background-color: #e9ecef;
+  color: #333;
+  font-weight: 500;
+  transition: 0.3s;
+}
+
+.pagination button:hover {
+  background-color: #0d6efd;
+  color: white;
+}
+
+.pagination button.active {
+  background-color: #0d6efd;
+  color: white;
+  font-weight: 600;
+}
+
+</style>
+<body>
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:12px;">
+        <div style="display:flex; align-items:center; gap:12px;">
+            <a href="Admin_Main.html" id="backToManager" style="display:inline-block;padding:8px 12px;background:#007BFF;color:#fff;border-radius:6px;text-decoration:none;font-weight:600;">←</a>
+            <h2 style="margin:0"></h2>
+        </div>
+        
+    </div>
+      <section id="leave-applications" class="section">
+  <div class="container">
+    <div class="text-center mb-4">
+      <h2 class="fw-bold text-primary">Leave Applications</h2>
+    
+      <p class="text-muted">View and manage your leave applications</p>
+    </div>
+
+    <div class="card p-4">
+      <div class="d-flex justify-content-between mb-3">
+        <a href="leave.html" class="btn btn-primary">
+          + Apply Leave
+        </a>
+        <input type="text" class="form-control w-25" placeholder="Search by Leave Type, Reason" id="leavesearchInput">
+      </div>
+
+      <table id="leaveTable" class="styled-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>EmployeeID</th>
+            <th>Leave type</th>
+            <th>From date</th>
+            <th>To Date</th>
+            <th>Reason</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+      <!-- Pagination controls -->
+      <div id="leavePagination" class="pagination" style="margin-top:12px; display:flex; gap:8px; align-items:center;"></div>
+    </div>
+  </div>
+</section>
+    <style>
+    /* Pagination styling (match manager.html) */
+    .pagination { font-family: inherit; }
+    .pagination button {
+      background: #fff;
+      border: 1px solid #ddd;
+      padding: 6px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .pagination button:hover { background: #f4f6fb; }
+    .pagination button[disabled] { opacity: 0.5; cursor: default; }
+    .pagination .page-number.active {
+      background: #3a86ff; color: #fff; border-color: #2a6cd4;
+    }
+    .pagination .page-info { color: #555; margin-left: 8px; }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+      <script>
+
+    // auto-calculate number of days between start and end (inclusive)
+    (function () {
+      function calculateNoOfDays() {
+        const startEl = document.getElementById('start_date');
+        const endEl = document.getElementById('end_date');
+        const outEl = document.getElementById('no_of_days');
+
+        if (!startEl || !endEl || !outEl) return;
+
+        const start = startEl.value;
+        const end = endEl.value;
+
+        if (!start || !end) {
+          outEl.value = '';
+          return;
+        }
+
+        const s = new Date(start);
+        const e = new Date(end);
+        // normalize to UTC midnight to avoid timezone/DST issues
+        const utc1 = Date.UTC(s.getFullYear(), s.getMonth(), s.getDate());
+        const utc2 = Date.UTC(e.getFullYear(), e.getMonth(), e.getDate());
+        let diffDays = Math.floor((utc2 - utc1) / (1000 * 60 * 60 * 24));
+
+        // treat as inclusive days (same start & end => 1)
+        if (diffDays >= 0) diffDays = diffDays + 1;
+
+        outEl.value = diffDays >= 0 ? diffDays : '';
+      }
+
+      // attach listeners
+      document.addEventListener('DOMContentLoaded', function () {
+        const s = document.getElementById('start_date');
+        const e = document.getElementById('end_date');
+        if (s) s.addEventListener('change', calculateNoOfDays);
+        if (e) e.addEventListener('change', calculateNoOfDays);
+        // calculate if values already present
+        calculateNoOfDays();
+      });
+
+      //load to db
+      document.getElementById('leaveForm').addEventListener('submit', function(e){
+        e.preventDefault();
+
+        // basic validation: end must not be before start
+        const startVal = this.start_date.value;
+        const endVal = this.end_date.value;
+        if (startVal && endVal) {
+          const sDate = new Date(startVal);
+          const eDate = new Date(endVal);
+          if (eDate < sDate) {
+            alert('End date cannot be before start date.');
+            return;
+          }
+        }
+
+        const payload = {
+          leave_type: this.leave_type.value,
+          start_date: this.start_date.value,
+          end_date: this.end_date.value,
+          reason: this.reason.value,
+          no_of_days: this.no_of_days.value, // ✅ use .value
+          userid: this.userid.value,         // include user ID
+          status: 'Pending',
+          away_hq: this.away_hq && this.away_hq.checked ? 'yes' : 'no' // send 'yes' if checked, else 'no'
+        };
+
+    fetch('http://localhost:3000/api/leave', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify(payload)
+    })
+    .then(res => res.json().catch(() => null))
+    .then(data => {
+      if (data && (data.success === true || data.success === 'true')) {
+        alert(data.message || 'Leave application submitted');
+        this.reset();
+        // reset calculated field too
+        const out = document.getElementById('no_of_days'); if (out) out.value = '';
+        const modalEl = document.getElementById('leaveModal');
+        try { if (modalEl && bootstrap && bootstrap.Modal) bootstrap.Modal.getInstance(modalEl).hide(); } catch(e){}
+      } else {
+        alert((data && data.message) || 'Failed to submit leave');
+      }
+    })
+    .catch(err => { console.error(err); alert('An error occurred while submitting leave'); });
+      });
+    })();
+
+//fetch from db
+// Pagination for leave applications (10 per page)
+const LEAVES_PER_PAGE = 10;
+let leavesDataAll = [];
+let leavesFiltered = [];
+let currentLeavePage = 1;
+
+async function loadLeaves() {
+  try {
+    const res = await fetch('http://localhost:3000/api/leaves')
+
+    const data = await res.json();
+
+    leavesDataAll = Array.isArray(data) ? data : [];
+    leavesFiltered = leavesDataAll.slice();
+    currentLeavePage = 1;
+    renderLeavesPage(currentLeavePage);
+  } catch (err) {
+    console.error('Error loading leaves:', err);
+  }
+}
+
+function renderLeavesPage(page = 1) {
+  const tbody = document.querySelector('#leaveTable tbody');
+  tbody.innerHTML = '';
+
+  const total = leavesFiltered.length;
+  const totalPages = Math.max(1, Math.ceil(total / LEAVES_PER_PAGE));
+  if (page < 1) page = 1;
+  if (page > totalPages) page = totalPages;
+  currentLeavePage = page;
+
+  const start = (page - 1) * LEAVES_PER_PAGE;
+  const pageItems = leavesFiltered.slice(start, start + LEAVES_PER_PAGE);
+
+  if (pageItems.length === 0) {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td colspan="7" style="text-align:center;color:#666;padding:18px;">No records found.</td>`;
+    tbody.appendChild(tr);
+  } else {
+    pageItems.forEach(leave => {
+      const row = `
+        <tr>
+          <td>${leave.id}</td>
+          <td>${leave.employeeID}</td>
+          <td>${leave.leave_type}</td>
+          <td>${new Date(leave.start_date).toLocaleDateString()}</td>
+          <td>${new Date(leave.end_date).toLocaleDateString()}</td>
+          <td>${leave.reason}</td>
+          <td>${leave.status}</td>
+        </tr>`;
+      tbody.insertAdjacentHTML('beforeend', row);
+    });
+  }
+
+  renderLeavePaginationControls(totalPages);
+}
+
+function renderLeavePaginationControls(totalPages) {
+  const container = document.getElementById('leavePagination');
+  if (!container) return;
+  container.innerHTML = '';
+  const total = leavesFiltered.length;
+  if (total === 0) return;
+
+  const prev = document.createElement('button');
+  prev.textContent = 'Prev';
+  prev.disabled = currentLeavePage === 1;
+  prev.onclick = () => renderLeavesPage(currentLeavePage - 1);
+  container.appendChild(prev);
+
+
+  const maxButtons = 7;
+  let startPage = 1;
+  let endPage = totalPages;
+  if (totalPages > maxButtons) {
+    const half = Math.floor(maxButtons / 2);
+    startPage = Math.max(1, currentLeavePage - half);
+    endPage = startPage + maxButtons - 1;
+    if (endPage > totalPages) {
+      endPage = totalPages;
+      startPage = endPage - maxButtons + 1;
+    }
+  }
+
+  if (startPage > 1) {
+    const btn = document.createElement('button');
+    btn.textContent = '1';
+    btn.className = 'page-number';
+    btn.onclick = () => renderLeavesPage(1);
+    container.appendChild(btn);
+    if (startPage > 2) {
+      const dots = document.createElement('span');
+      dots.textContent = '...';
+      dots.style.margin = '0 6px';
+      container.appendChild(dots);
+    }
+  }
+
+  for (let i = startPage; i <= endPage; i++) {
+    const btn = document.createElement('button');
+    btn.textContent = String(i);
+    btn.className = 'page-number' + (i === currentLeavePage ? ' active' : '');
+    btn.onclick = () => renderLeavesPage(i);
+    container.appendChild(btn);
+  }
+
+  if (endPage < totalPages) {
+    if (endPage < totalPages - 1) {
+      const dots = document.createElement('span');
+      dots.textContent = '...';
+      dots.style.margin = '0 6px';
+      container.appendChild(dots);
+    }
+    const btn = document.createElement('button');
+    btn.textContent = String(totalPages);
+    btn.className = 'page-number';
+    btn.onclick = () => renderLeavesPage(totalPages);
+    container.appendChild(btn);
+  }
+
+  const next = document.createElement('button');
+  next.textContent = 'Next';
+  next.disabled = currentLeavePage === totalPages || totalPages === 0;
+  next.onclick = () => renderLeavesPage(currentLeavePage + 1);
+  container.appendChild(next);
+
+  const info = document.createElement('span');
+  info.className = 'page-info';
+  const from = total === 0 ? 0 : (start + 1);
+  const to = Math.min(start + LEAVES_PER_PAGE, total);
+  info.textContent = `Showing ${from}-${to} of ${total}`;
+  container.appendChild(info);
+}
+
+// initial load
+loadLeaves();
+setInterval(loadLeaves, 5000);
+document.getElementById('leavesearchInput').addEventListener('keyup', function () {
+    const searchTerm = this.value.toLowerCase();
+    const rows = document.querySelectorAll('#leaveTable tbody tr');
+
+    rows.forEach(row => {
+        const rowText = row.textContent.toLowerCase();
+        row.style.display = rowText.includes(searchTerm) ? '' : 'none';
+    });
+});
+
+// auto refresh every 5 seconds
+setInterval(loadLeaves, 5000);
+  </script>
+  
+
+    
+</body>
+</html>

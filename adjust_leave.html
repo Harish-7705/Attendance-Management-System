@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adjust Leave Balance</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* --- Existing body and html styles (add if not present) --- */
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+    display: flex; /* Keep flexbox for body */
+    justify-content: center;
+    align-items: center;
+}
+
+/* --- Modify the .container styles --- */
+.container {
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    margin: 0;
+    background-color: #fff;
+    padding: 20px; /* This padding still applies around the content */
+    box-shadow: none;
+    border-radius: 0;
+}
+
+/* --- Keep the rest of your styles as they are --- */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #eee;
+    margin-bottom: 20px;
+}
+
+.logo {
+    font-weight: bold;
+    font-size: 24px;
+    color: #007bff;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+}
+
+nav ul li {
+    margin-right: 20px;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: #555;
+    font-weight: bold;
+}
+
+nav ul li a:hover {
+    color: #007bff;
+}
+
+.header-icons span {
+    margin-left: 15px;
+    font-size: 1.2em;
+    cursor: pointer;
+}
+
+/* Leave Master Page Styles */
+.leave-master h1 {
+    display: inline-block;
+    margin-right: 20px;
+}
+
+.add-leave-balance {
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    float: right;
+}
+
+.add-leave-balance:hover {
+    background-color: #218838;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+table th, table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+}
+
+table th {
+    background-color: #f2f2f2;
+}
+
+.edit-btn {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.edit-btn:hover {
+    background-color: #0056b3;
+}
+
+/* Adjust Leave Balance Page Styles */
+.adjust-leave h1 {
+    margin-bottom: 10px;
+}
+
+.adjust-leave {
+    max-width: 600px; /* Constrain the form width for better readability */
+    margin: 50px auto; /* Center the form horizontally and add vertical space */
+    padding: 30px; /* Add some padding around the form itself */
+    background-color: #f9f9f9; /* Slightly different background for the form area */
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(248, 247, 247, 0.912); /* Add a subtle shadow to the form */
+    display: flex; /* Use flexbox for the main content to center vertically */
+    flex-direction: column; /* Stack items vertically */
+    justify-content: center; /* Center content vertically within .adjust-leave */
+    height: calc(100% - 100px); /* Adjust height to fill container with margin consideration */
+}
+
+.form-group {
+    margin-bottom: 10px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+.form-group input[type="text"],
+.form-group input[type="number"] {
+    width: 50%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.leave-type-options {
+    display: flex;
+    gap: 10px;
+}
+
+.leave-type-btn {
+    background-color: #e9ecef;
+    border: 1px solid #ced4da;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    color: #495057;
+}
+
+.leave-type-btn.active {
+    background-color: #007bff;
+    color: #fff;
+    border-color: #007bff;
+}
+
+.leave-type-btn:hover:not(.active) {
+    background-color: #dee2e6;
+}
+
+.form-actions {
+    margin-top: 30px;
+    text-align: right;
+}
+
+.cancel-btn {
+    background-color: #6c757d;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+.cancel-btn:hover {
+    background-color: #5a6268;
+}
+
+.submit-btn {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.submit-btn:hover {
+    background-color: #0056b3;
+}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <main class="adjust-leave">
+            <h1>Adjust Leave Balance</h1>
+            <p>Add or update leave balances for an employee.</p>
+
+            
+                <form id="leaveForm">
+                     <div class="form-group">
+                    <label for="employeeId">Employee ID</label>
+                    <select id="employeeId" name="employeeId">
+                    <option value="">-- Select Employee --</option>
+                     </select>
+
+                </div>
+                  <!-- <script>
+    fetch('http://localhost:3000/get-users')
+      .then(response => response.json())
+      .then(data => {
+        const select = document.getElementById('employeeId');
+        data.forEach(row => {
+          const option = document.createElement('option');
+          option.value = row.userid;
+          option.textContent = row.userid;
+          select.appendChild(option);
+        });
+        document.getElementById('leaveForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const userid = document.getElementById('employeeId').value;
+      const leaveType = document.getElementById('leaveType').value;
+      const leaveCount = document.getElementById('leaveCount').value;
+
+      const response = await fetch('http://localhost:3000/update-leave', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userid, leaveType, leaveCount })
+      });
+
+      const result = await response.json();
+      alert(result.message || 'Leave updated!');
+    });
+
+      })
+      .catch(err => console.error('Error fetching users:', err));
+  </script> -->
+
+              <div class="form-group">
+  <label>Leave Type</label>
+  <div class="leave-type-options">
+    <button type="button" class="leave-type-btn active" data-leave-type="casual_leave">Casual (CL)</button>
+    <button type="button" class="leave-type-btn" data-leave-type="earned_leave">Earned (EL)</button>
+    <button type="button" class="leave-type-btn" data-leave-type="sick_leave">Hospital (HL)</button>
+  </div>
+</div>
+
+
+                <div class="form-group">
+                    <label for="balance">Balance</label>
+                    <input type="number" id="balance" value="10">
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="cancel-btn" onclick="location.href='Leav3.html'">Cancel</button>
+                    <button type="submit" class="submit-btn">Submit</button>
+                </div>
+                
+            </form>
+        </main>
+        <script>
+  // Fetch users to populate the Employee ID dropdown
+  fetch('http://localhost:3000/get-users')
+    .then(response => response.json())
+    .then(data => {
+      const select = document.getElementById('employeeId');
+      data.forEach(row => {
+        const option = document.createElement('option');
+        option.value = row.userid;
+        option.textContent = row.userid;
+        select.appendChild(option);
+      });
+      
+      // Add submit functionality to the form
+//       document.getElementById('leaveForm').addEventListener('submit', async (e) => {
+//         e.preventDefault();
+        
+//         const userid = document.getElementById('employeeId').value;
+//         const leaveType = document.querySelector('.leave-type-btn.active').textContent;
+//         const leaveCount = document.getElementById('balance').value;
+
+//         const response = await fetch('http://localhost:3000/update-leave', {
+//           method: 'POST',
+//           headers: { 'Content-Type': 'application/json' },
+//           body: JSON.stringify({ userid, leaveType, leaveCount })
+//         });
+
+//         const result = await response.json();
+//         alert(result.message || 'Leave updated!');
+//       });
+
+//     })
+//     .catch(err => console.error('Error fetching users:', err));
+
+//   // Handle toggling of leave type buttons
+//   const leaveTypeButtons = document.querySelectorAll('.leave-type-btn');
+//   leaveTypeButtons.forEach(button => {
+//     button.addEventListener('click', () => {
+//       // Remove 'active' class from all buttons
+//       leaveTypeButtons.forEach(btn => btn.classList.remove('active'));
+
+//       // Add 'active' class to the clicked button
+//       button.classList.add('active');
+//     });
+  });
+</script>
+<script>
+  // Fetch users to populate the Employee ID dropdown
+  fetch('http://localhost:3000/get-users')
+    .then(response => response.json())
+    .then(data => {
+      const select = document.getElementById('employeeId');
+      data.forEach(row => {
+        const option = document.createElement('option');
+        option.value = row.userid;
+        option.textContent = row.userid;
+        select.appendChild(option);
+      });
+      
+      // Add submit functionality to the form
+      document.getElementById('leaveForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        console.log('Form submitted'); // Debug log
+        
+        const userid = document.getElementById('employeeId').value;
+        const leaveType = document.querySelector('.leave-type-btn.active').textContent.trim(); // Get the active leave type
+        const leaveCount = document.getElementById('balance').value;
+
+        // Prepare payload to send to the backend
+        const payload = {
+          userid,
+          leaveType,
+          leaveCount: parseInt(leaveCount, 10) // Ensure leaveCount is an integer
+        };
+        console.log('Submitting payload:', payload); // Debug log
+
+        const response = await fetch('http://localhost:3000/update-leave', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload) // Send payload to the backend
+        });
+
+        const result = await response.json();
+        alert(result.message || 'Leave updated!');
+      });
+
+    })
+    .catch(err => console.error('Error fetching users:', err));
+
+  // Handle toggling of leave type buttons
+  // Handle toggling of leave type buttons
+const leaveTypeButtons = document.querySelectorAll('.leave-type-btn');
+leaveTypeButtons.forEach(button => {
+  button.addEventListener('click', () => {
+    // Remove 'active' class from all buttons
+    leaveTypeButtons.forEach(btn => btn.classList.remove('active'));
+
+    // Add 'active' class to the clicked button
+    button.classList.add('active');
+
+    // Set the leave type in a hidden input field (or store it directly if necessary)
+    document.getElementById('leaveType').value = button.getAttribute('data-leave-type');
+  });
+});
+
+  
+</script>
+
+
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

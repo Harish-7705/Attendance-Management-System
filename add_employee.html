@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Add Employee - ALMS</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="base.css">
+  <style>
+    /* Light-theme, cool-looking professional styles for Add Employee page */
+    .main.fullpage { margin-left: 0 !important; }
+
+    :root{
+      --bg-1: #f4fbff;
+      --card-bg: #ffffff;
+      --muted: #6b7280;
+      --text: #0f1724;
+      --accent-1: #06b6d4; /* teal */
+      --accent-2: #0ea5e9; /* sky */
+      --focus: rgba(14,165,233,0.14);
+    }
+
+    body{ background: linear-gradient(180deg,var(--bg-1) 0%, #ffffff 60%); color:var(--text); font-family: 'Roboto', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; }
+    .container { max-width: 1100px; margin: 28px auto; padding: 0 18px; }
+
+    .add-employee-card{
+      background: var(--card-bg);
+      border-radius: 14px;
+      padding: 34px;
+      box-shadow: 0 12px 40px rgba(10,25,41,0.06);
+      border: 1px solid rgba(6,44,70,0.04);
+    }
+
+    .text-center h2{ font-size:22px; color:var(--accent-2); margin-bottom:6px; }
+    .text-center p{ color:var(--muted); margin-top:0; margin-bottom:12px; }
+
+    .form-section{ display:grid; grid-template-columns: 1fr 1fr; gap:18px; }
+    .form-section > div { display:block; }
+
+    label{ display:block; font-weight:600; margin-bottom:8px; color:#334155; font-size:14px; }
+    input[type="text"], input[type="password"], input[type="date"], input[type="email"], input[type="tel"], select, textarea{
+      width:100%; padding:11px 14px; border-radius:10px; border:1px solid rgba(14,165,233,0.12); background:#fbfeff; color:var(--text); box-sizing:border-box; font-size:14px;
+      transition: box-shadow .15s ease, border-color .15s ease, transform .05s ease;
+    }
+    input:focus, select:focus, textarea:focus{ outline:none; border-color: var(--accent-2); box-shadow: 0 10px 30px var(--focus); transform: translateY(-1px); }
+    textarea{ min-height:110px; resize:vertical; }
+
+    /* Radio / employee-type pills */
+    .employee-type-group { display:flex; flex-wrap:wrap; gap:10px; }
+    .employee-type-group label{ background:#f1fbfd; padding:8px 12px; border-radius:999px; cursor:pointer; border:1px solid rgba(6,44,70,0.04); font-weight:600; color:#075985; }
+    .employee-type-group input { margin-right:8px; accent-color: var(--accent-1); }
+
+    .form-actions-row{ display:flex; gap:12px; align-items:center; margin-top:12px; }
+
+    .form-actions{ display:flex; gap:12px; justify-content:flex-end; margin-top:20px; }
+    .btn{ display:inline-flex; align-items:center; gap:8px; padding:10px 16px; border-radius:10px; font-weight:700; cursor:pointer; text-decoration:none; }
+    .btn.submit{ background: linear-gradient(90deg,var(--accent-1),var(--accent-2)); color:#fff; box-shadow: 0 6px 20px rgba(14,165,233,0.12); border:none; }
+    .btn.cancel{ background:#f8fafc; color:#0f1724; border:1px solid rgba(15,23,42,0.04); }
+
+    .input-error{ color:#dc2626; font-size:13px; margin-top:6px; }
+
+    /* small screens */
+    @media (max-width:880px){ .form-section{ grid-template-columns:1fr; } .add-employee-card{ padding:20px; } }
+
+    /* subtle focus for accessibility */
+    :focus{ outline: none; }
+  </style>
+</head>
+<body>
+  <main class="main fullpage">
+    <div class="container">
+      <div class="text-center mb-4">
+        <h2 class="fw-bold text-primary">Add New Employee</h2>
+        <p class="text-muted">Fill employee details and submit</p>
+      </div>
+
+      <div class="card p-4 add-employee-card">
+        <form id="employeeForm" method="POST" action="/addEmployee">
+          <div class="form-section">
+            <div>
+              <label>Full Name</label>
+              <input type="text" name="username" required>
+
+              <label>Employee ID</label>
+              <input type="text" name="userid" required>
+
+              <label>Password</label>
+              <input type="password" name="password" required>
+
+              <label>Date of Birth</label>
+              <input type="date" name="dob" required>
+
+              <label>Date of Joining</label>
+              <input type="date" name="doj" required>
+
+              <label>Email</label>
+              <input type="email" name="email" required>
+            </div>
+
+            <div>
+              <label>Phone Number</label>
+              <input type="tel" name="phone" required>
+
+              <label>Address</label>
+              <input type="text" name="address">
+
+              <label>Department</label>
+              <select name="department" required>
+                <option value="">Select department</option>
+                <option>HR</option>
+                <option>IT</option>
+                <option>Finance</option>
+                <option>Operations</option>
+              </select>
+
+              <label>Designation</label>
+              <select name="designation" required>
+                <option value="">Select designation</option>
+                <option>Developer</option>
+                <option>Representative</option>
+                <option>Manager</option>
+                <option>Specialist</option>
+                <option>Analyst</option>
+                <option>Legal</option>
+              </select>
+
+              <label>Employee Type</label>
+              <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:6px;">
+                <label><input type="radio" name="employee_type" value="Regular" required> Regular</label>
+                <label><input type="radio" name="employee_type" value="Outsourced"> Out Sourced</label>
+                <label><input type="radio" name="employee_type" value="OnContract"> On Contract</label>
+                <label><input type="radio" name="employee_type" value="Apprentice"> Apprentice</label>
+                <label><input type="radio" name="employee_type" value="Intern"> Intern</label>
+              </div>
+
+            </div>
+          </div>
+
+          <div style="margin-top:12px; display:flex; gap:12px; align-items:center;">
+            <div style="flex:1">
+              <label>Status</label>
+              <select name="status"><option value="active">Active</option><option value="inactive">Inactive</option></select>
+            </div>
+            <div style="flex:1">
+              <label>Role</label>
+              <select name="role"><option value="employee">employee</option><option value="manager">manager</option><option value="admin">admin</option></select>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <a href="manager.html" class="btn cancel">Back</a>
+            <button type="submit" class="btn submit">Add Employee</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // client-side validation matching manager.html modal logic
+    function showError(input, message) {
+      let error = document.createElement('div');
+      error.className = 'input-error';
+      error.style.color = 'red';
+      error.style.fontSize = '12px';
+      error.style.marginTop = '4px';
+      error.textContent = message;
+      input.parentNode.insertBefore(error, input.nextSibling);
+    }
+
+    document.getElementById('employeeForm').addEventListener('submit', async function (e) {
+      document.querySelectorAll('.input-error').forEach(el => el.remove());
+      let valid = true;
+
+      const phoneInput = this.phone;
+      const phone = phoneInput.value.trim();
+      if (!/^\d{10}$/.test(phone)) { showError(phoneInput, 'Phone number must be exactly 10 digits.'); valid = false; }
+
+      const dobInput = this.dob;
+      const dob = new Date(dobInput.value);
+      const today = new Date();
+      const minDob = new Date(today.getFullYear() - 18, today.getMonth(), today.getDate());
+      if (!dobInput.value || dob > minDob) { showError(dobInput, 'Employee must be at least 18 years old.'); valid = false; }
+
+      const dojInput = this.doj;
+      const doj = new Date(dojInput.value);
+      const minDoj = new Date(dob.getFullYear() + 18, dob.getMonth(), dob.getDate());
+      if (!dojInput.value || doj < minDoj) { showError(dojInput, 'Date of joining must be at least 18 years after date of birth.'); valid = false; }
+
+      if (!valid) { e.preventDefault(); return; }
+
+      e.preventDefault();
+      const formData = new FormData(this);
+      const data = Object.fromEntries(formData);
+
+      try {
+        const res = await fetch('/addEmployee', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(data) });
+        if (res.ok) {
+          alert('Employee added successfully');
+          window.location.href = 'manager.html';
+        } else {
+          const body = await res.json().catch(()=>null);
+          alert((body && body.message) || 'Error adding employee');
+        }
+      } catch (err) {
+        console.error(err); alert('Network error while adding employee');
+      }
+    });
+  </script>
+</body>
+</html>
